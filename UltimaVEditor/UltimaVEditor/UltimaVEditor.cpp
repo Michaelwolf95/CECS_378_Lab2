@@ -6,72 +6,21 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include "HexTools.h"
+#include "Character.h"
+#include "Inventory.h"
 using namespace std;
 
 static char* buffer;
 
-struct Character
-{
-	char name[9];
-	char gender;
-	char status[2];
-	unsigned char str;
-	unsigned char intel;
-	unsigned char dex;
-	unsigned char magic;
-	unsigned short HP;
-	unsigned short HM;
-	unsigned short EXP;
-	unsigned char LVL;
-	char UNKNOWN[2];
-	char equipment[6];
-	char partyFlags;
+const unsigned short START_OFFSET = 2;
+const unsigned short CHARACTER_SIZE = 32;
 
-	string getName()
-	{
-		return string(name);
-	};
-	void setName(string _name)
-	{
-		int i;
-		for (i = 0; i < 8 && i < _name.length(); i++)
-		{
-			name[i] = _name[i];
-		}
-		for (i; i < 9; i++)
-		{
-			name[i] = 0x00;
-		}
-	}
-	void setMale()
-	{
-		gender = 0x0B;
-	}
-	void setFemale()
-	{
-		gender = 0x0C;
-	}
-};
-
-// HEX TOOLS
-struct HexCharStruct
-{
-	unsigned char c;
-	HexCharStruct(unsigned char _c) : c(_c) { }
-};
-inline std::ostream& operator<<(std::ostream& o, const HexCharStruct& hs)
-{
-	return (o << std::hex << (int)hs.c);
-}
-inline HexCharStruct hex(unsigned char _c)
-{
-	return HexCharStruct(_c);
-}
-
-void EditCharacters();
+void EditCharacter(Character* c);
 void EditItems();
 //void GetCharacter();
-void PrintCharacter(Character c);
+//void PrintCharacter(Character* c);
+//void PrintInventory(Inventory* inv);
 
 int main(int argc, char *argv[], char *envp[])
 {
@@ -96,38 +45,42 @@ int main(int argc, char *argv[], char *envp[])
 	infile.seekg(0, infile.end);
 	long size = infile.tellg();
 	infile.seekg(0);
-	cout << "File Size (bytes):\t" << size << "\n";
+	cout << "File Size (bytes): " << size << "\n";
 
 	// STORE File in Buffer
 	buffer = new char[size];
 	infile.read(buffer, size);
 
-	int i = 0;
-	for (i=0; i < size; i++)
-	{
-		cout << hex(buffer[i]) << "\n";
-		if (buffer[i] != 0x00)
-		{
-			break;
-		}
-	}
-	Character* player = (Character*)(buffer+i);
-	PrintCharacter(*player);
+	char* cPtr = buffer + START_OFFSET;
+	Character* player = (Character*)(cPtr);
+	PrintCharacter(player);
+
+	/*
+	Player, Shamino, Iolo, Mariah
+	Geoffrey, Jaana, Julia, Dupre
+	Katrina, Sentri, Gwenno, Johne
+	Gorn, Maxwell, Toshi, Saduj
+	*/
+	//cout << "\nSHAMINO\t==================" << "\n";
+	//Character* Shamino = (Character*)(cPtr + (CHARACTER_SIZE * 1));
+	//PrintCharacter(Shamino);
+	//cout << "\nIOLO\t==================" << "\n";
+	//Character* Iolo = (Character*)(cPtr + (CHARACTER_SIZE* 2));
+	//PrintCharacter(Iolo);
+	//cout << "\nMARIAH\t==================" << "\n";
+	//Character* Mariah = (Character*)(cPtr + (CHARACTER_SIZE * 3));
+	//PrintCharacter(Mariah);
+
+	//ToDo: Inventory
+	Inventory* inv = (Inventory*)(cPtr + (CHARACTER_SIZE * 16));
+	PrintInventory(inv);
 
 	// MODIFY the Buffer
-	cout << "MODIFYING CHARACTER STATS...\n";
-	player->setName("Susan");
-	player->setFemale();
-	player->str = 99;
-	player->intel = 99;
-	player->dex = 99;
-	player->magic = 99;
-	player->HP = 999;
-	player->HM = 999;
-	player->EXP = 9999;
-	player->LVL = 99;
 
-	PrintCharacter(*player);
+	//EditCharacter(player);
+	inv->food = 25;
+	inv->equipment.mysticArmor = 4;
+	inv->weapons.magicAxe = 3;
 
 
 	// WRITE the Buffer back into the File
@@ -148,15 +101,27 @@ int main(int argc, char *argv[], char *envp[])
 	outfile.close();
 	infile.close();
 
-	cout << "\nPress any key to continue...\n";
-	int x;
-	cin >> x;
+	//cout << "\nPress any key to continue...\n";
+	//int x;
+	//cin >> x;
     return 0;
 }
 
-void EditCharacters()
+void EditCharacter(Character* c)
 {
+	cout << "MODIFYING CHARACTER STATS...\n";
+	c->setName("Susan");
+	c->setFemale();
+	c->str = 99;
+	c->intel = 99;
+	c->dex = 99;
+	c->magic = 99;
+	c->HP = 999;
+	c->HM = 999;
+	c->EXP = 9999;
+	c->LVL = 99;
 
+	PrintCharacter(c);
 }
 
 void EditItems()
@@ -164,30 +129,6 @@ void EditItems()
 
 }
 
-void PrintCharacter(Character c)
-{
-	//cout << "HEX\t" << std::hex << c << "\n";
-	cout << "Name:\t" << c.getName() << "\n";
-	cout << "Gender:\t" << ((c.gender==0x0B)? "Male": "Female") << "\n";
-	cout << "stat0:\t" << std::hex << c.status[0] << "\n";
-	cout << "stat1:\t" << std::hex << c.status[1] << "\n";
-	cout << "STR:\t" << std::dec << +c.str << "\n";
-	cout << "INT:\t"<< std::dec << +c.intel << "\n";
-	cout << "DEX:\t" << std::dec << +c.dex << "\n";
-	cout << "MGC:\t" << std::dec << +c.magic << "\n";
-	cout << "HP:\t" << std::dec << c.HP << "\n";
-	cout << "HM:\t" << std::dec << c.HM << "\n";
-	cout << "EXP:\t" << std::dec << c.EXP << "\n";
-	cout << "LVL:\t" << std::dec << +c.LVL << "\n";
-	cout << "???:\t" << hex(c.UNKNOWN[0]) << " " << hex(c.UNKNOWN[1]) << "\n";
-	cout << "Equipment:\n";
-	for (int i = 0; i < 6; i++)
-	{
-		cout << "   " << i << ": " << hex(c.equipment[i]) << "\n";
-	}
-	cout << "pFlags:\t" << hex(c.partyFlags) << "\n";
-	
-}
 
 static std::vector<char> ReadAllBytes(char const* filename)
 {
