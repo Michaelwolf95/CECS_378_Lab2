@@ -2,13 +2,16 @@
 /*
 This structure aims to copy the exact memory layout of the Ultima V inventory.
 
-Most of this was discovered and filled out by hand.
+Most of this was discovered and filled out by hand using trial-and-error 
+and going off of DATA.OVL, which lists the names of items roughly in the order of memory layout.
+
 The rest was filled out by using this helpful online resource, 
 which saved many hours of work:
 http://martin.brenner.de/ultima/u5save.html
 
-I DID NOT USE THIS UNTIL THE END - I just wanted to fill in the gaps.
+I DID NOT USE THIS UNTIL THE VERY END - I just wanted to fill in the gaps.
 */
+
 struct Equipment
 {
 	char leatherHelm;
@@ -71,7 +74,7 @@ struct UniqueAmulets
 };
 struct Spells
 {
-	char spellIndices[47];
+	char spellIndices[48];
 };
 struct Scrolls
 {
@@ -99,8 +102,7 @@ struct Reagents
 	char nightShade;
 	char mandrakeRoot;
 };
-
-///
+// MAIN STRUCT
 struct Inventory
 {
 	// Collectables
@@ -110,7 +112,7 @@ struct Inventory
 	char gems;
 	char torches;
 	char grapple;		// ??
-	char magicCrpt;
+	char magicCarpet;
 	char skullKeys;
 	char unkown_0;
 	char amulets;
@@ -138,7 +140,6 @@ struct Inventory
 	char unkown_5;
 };
 
-
 void PrintInventory(Inventory* inv)
 {
 	cout << "INVENTORY ================\n";
@@ -148,7 +149,7 @@ void PrintInventory(Inventory* inv)
 	cout << "Gems:\t\t" << +inv->gems << "\n";
 	cout << "Torch:\t\t" << +inv->torches << "\n";
 	cout << "Grapple?:\t" << +inv->grapple << "\n";
-	cout << "MgcCrpt:\t" << +inv->magicCrpt << "\n";
+	cout << "MgcCrpt:\t" << +inv->magicCarpet << "\n";
 	cout << "SkullKeys:\t" << +inv->skullKeys << "\n";
 	cout << "[Unknown0]:\t" << +inv->unkown_0 << "\n";
 	cout << "Amulets:\t" << +inv->amulets << "\n";
@@ -157,5 +158,15 @@ void PrintInventory(Inventory* inv)
 	{
 		cout << "other" << i << ":\t\t" << hex(inv->otherSlots[i]) << "\n";
 	}
-	cout << "PocketWatch:\t" << hex(inv->pocketwatch) << "\n\n";
+	cout << "PocketWatch:\t" << hex(inv->pocketwatch) << "\n";
+
+	cout << "Ankh:\t\t" << +inv->uniqueAmulets.ankh << "\n";
+
+	cout << "YellowPotion:\t" << +inv->potions.yellow << "\n";
+
+	cout << "MagicAxe:\t" << +inv->weapons.magicAxe << "\n";
+
+	cout << "Ginseng:\t" << +inv->reagents.ginseng << "\n";
+
+	cout << "PartySize:\t" << +inv->partySize << "\n\n";
 }

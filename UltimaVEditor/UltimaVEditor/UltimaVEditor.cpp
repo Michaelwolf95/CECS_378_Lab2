@@ -16,14 +16,20 @@ static char* buffer;
 const unsigned short START_OFFSET = 2;
 const unsigned short CHARACTER_SIZE = 32;
 
+static Character* player;
+static Character* characters[15];
+static Inventory* inventory;
+
+/* CHARACTERS (Default Order):
+Player, Shamino, Iolo, Mariah, Geoffrey, Jaana, Julia, Dupre
+Katrina, Sentri, Gwenno, Johne, Gorn, Maxwell, Toshi, Saduj */
+
 void EditCharacter(Character* c);
 void EditItems();
-//void GetCharacter();
-//void PrintCharacter(Character* c);
-//void PrintInventory(Inventory* inv);
 
 int main(int argc, char *argv[], char *envp[])
 {
+	// GET TARGET DIRECTORY ================================================
 	string targetDir;
 	if (argc < 2)
 	{
@@ -40,50 +46,48 @@ int main(int argc, char *argv[], char *envp[])
 	cout << targetDir << "\n";
 	cout << "Opening " << saveFile;
 
-	// OPEN Save File
+	// OPEN Save File =====================================================
 	std::ifstream infile(saveFile.c_str(), std::ifstream::binary);
 	infile.seekg(0, infile.end);
 	long size = infile.tellg();
 	infile.seekg(0);
 	cout << "File Size (bytes): " << size << "\n";
 
-	// STORE File in Buffer
+	// CACHE File bytes in Buffer =========================================
 	buffer = new char[size];
 	infile.read(buffer, size);
 
+	// Start of character pointers.
 	char* cPtr = buffer + START_OFFSET;
-	Character* player = (Character*)(cPtr);
-	PrintCharacter(player);
 
-	/*
-	Player, Shamino, Iolo, Mariah
-	Geoffrey, Jaana, Julia, Dupre
-	Katrina, Sentri, Gwenno, Johne
-	Gorn, Maxwell, Toshi, Saduj
-	*/
-	//cout << "\nSHAMINO\t==================" << "\n";
-	//Character* Shamino = (Character*)(cPtr + (CHARACTER_SIZE * 1));
-	//PrintCharacter(Shamino);
-	//cout << "\nIOLO\t==================" << "\n";
-	//Character* Iolo = (Character*)(cPtr + (CHARACTER_SIZE* 2));
-	//PrintCharacter(Iolo);
-	//cout << "\nMARIAH\t==================" << "\n";
-	//Character* Mariah = (Character*)(cPtr + (CHARACTER_SIZE * 3));
-	//PrintCharacter(Mariah);
+	// Init Player character pointer.
+	player = (Character*)(cPtr);
 
-	//ToDo: Inventory
-	Inventory* inv = (Inventory*)(cPtr + (CHARACTER_SIZE * 16));
-	PrintInventory(inv);
+	// Init Character pointers.
+	for (size_t i = 0; i < 15; i++)
+	{
+		characters[i] = (Character*)(cPtr + (CHARACTER_SIZE * (i+1)));
+	}
+	// Init Inventory pointer.
+	inventory = (Inventory*)(cPtr + (CHARACTER_SIZE * 16));
 
-	// MODIFY the Buffer
+	// MODIFY the Buffer ==================================================
+
+	//PrintCharacter(player);
+	//for (size_t i = 0; i < 15; i++)
+	//{
+	//	PrintCharacter(characters[i]);
+	//}
+	//PrintInventory(inventory);
 
 	//EditCharacter(player);
-	inv->food = 25;
-	inv->equipment.mysticArmor = 4;
-	inv->weapons.magicAxe = 3;
+	//inventory->food = 25;
+	//inventory->equipment.mysticArmor = 4;
+	//inventory->weapons.magicAxe = 9;
 
 
-	// WRITE the Buffer back into the File
+
+	// WRITE the Buffer back into the File ================================
 	string outputFile = saveFile;// "TEST_OUTPUT.GAM";
 
 	std::ofstream outfile(outputFile.c_str(), std::ofstream::binary);
