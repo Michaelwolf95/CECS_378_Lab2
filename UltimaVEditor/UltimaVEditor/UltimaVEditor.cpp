@@ -109,7 +109,7 @@ void EditorMainMenu()
 	while (!done)
 	{
 		cout << "Please Select what you want to Edit.\n";
-		cout << "[C]haracters, [I]nventory, [D]one\n";
+		cout << "[C]haracters, [I]nventory, [DONE]\n";
 		cin >> command;
 		if(IsChoice(command, "Characters"))
 		{
@@ -119,7 +119,7 @@ void EditorMainMenu()
 		{
 			EditInventoryMenu(&done);
 		}
-		else if (IsChoice(command, "Done"))
+		else if (IsChoice(command, "DONE"))
 		{
 			done = true;
 		}
@@ -154,7 +154,7 @@ void CharacterSelectMenu(bool* done)
 				cout << ",\t";
 			}
 		}
-		cout << "\n[#] Character, [B]ack, [D]one\n";
+		cout << "\n[#] Character, [B]ack, [DONE]\n";
 		cin >> command;
 		int num = -1;
 		sscanf(command.c_str(), "%d", &num);
@@ -166,7 +166,7 @@ void CharacterSelectMenu(bool* done)
 		{
 			back = true;
 		}
-		else if (IsChoice(command, "Done"))
+		else if (IsChoice(command, "DONE"))
 		{
 			*done = true;
 		}
@@ -362,6 +362,10 @@ void EditInventoryMenu(bool* done)
 			else if (command == "Crowns")
 			{
 				inventory->crowns = (unsigned char)num;
+			}
+			else if (command == "BlackBadge")
+			{
+				inventory->blackBadge = (unsigned char)((num > 0) ? (char)0xFF : (char)0x00);
 			}
 			else if (command == "MagicAxe")
 			{

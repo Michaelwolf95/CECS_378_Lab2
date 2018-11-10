@@ -154,5 +154,6 @@ void PrintInventory(Inventory* inv)
 	cout << "SkullKeys:\t" << +inv->skullKeys << "\n";
 	cout << "Amulets:\t" << +inv->amulets << "\n";
 	cout << "Crowns:\t\t" << +inv->crowns << "\n";
+	cout << "BlackBadge:\t" << +(((inv->blackBadge)== (char)0xFF)?1:0) << "\n";
 	cout << "MagicAxe:\t" << +inv->weapons.magicAxe << "\n";
 }
