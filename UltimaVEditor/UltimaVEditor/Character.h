@@ -46,26 +46,33 @@ struct Character
 
 void PrintCharacter(Character* c)
 {
-	cout << "CHARACTER ================\n";
-	//cout << "HEX\t" << std::hex << c << "\n";
+	cout << "CHARACTER ====================================================\n";
 	cout << "Name:\t" << c->getName() << "\n";
 	cout << "Gender:\t" << ((c->gender == 0x0B) ? "Male" : "Female") << "\n";
-	cout << "stat0:\t" << std::hex << c->status[0] << "\n";
-	cout << "stat1:\t" << std::hex << c->status[1] << "\n";
-	cout << "STR:\t" << std::dec << +c->str << "\n";
-	cout << "INT:\t" << std::dec << +c->intel << "\n";
-	cout << "DEX:\t" << std::dec << +c->dex << "\n";
-	cout << "MGC:\t" << std::dec << +c->magic << "\n";
-	cout << "HP:\t" << std::dec << c->HP << "\n";
-	cout << "HM:\t" << std::dec << c->HM << "\n";
-	cout << "EXP:\t" << std::dec << c->EXP << "\n";
-	cout << "LVL:\t" << std::dec << +c->LVL << "\n";
+	cout << "Status: " << (c->status[0]) << " " << (c->status[1]) << "\n";
+	cout << "STR: " << std::dec << +c->str << "\t";
+	cout << "INT: " << std::dec << +c->intel << "\t";
+	cout << "DEX: " << std::dec << +c->dex << "\t";
+	cout << "MGC: " << std::dec << +c->magic << "\n";
+	cout << "HP: " << std::dec << c->HP << "\t";
+	cout << "HM: " << std::dec << c->HM << "\t";
+	cout << "EXP: " << std::dec << c->EXP << "\n";
+	cout << "LVL: " << std::dec << +c->LVL << "\n";
 	cout << "???:\t" << hex(c->UNKNOWN[0]) << " " << hex(c->UNKNOWN[1]) << "\n";
-	cout << "Equipment:\n";
+
+	cout << "Equipment:\n|";
 	for (int i = 0; i < 6; i++)
 	{
-		cout << "  " << i << ":\t" << hex(c->equipment[i]) << "\n";
+		cout << "| [" << i << "]\t|";
 	}
-	cout << "pFlags:\t" << hex(c->partyFlags) << "\n\n";
+	cout << "|\n|";
+	for (int i = 0; i < 6; i++)
+	{
+		cout << "| " << hex(c->equipment[i]) << "\t|";
+	}
+	cout << "|\n";
+
+	cout << "pFlags:\t" << hex(c->partyFlags) << "\n";
+	cout << "==============================================================\n";
 
 }

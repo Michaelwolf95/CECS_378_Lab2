@@ -140,6 +140,8 @@ struct Inventory
 	char unkown_5;
 };
 
+// Only displaying editable values.
+// Showing them all would be... too much.
 void PrintInventory(Inventory* inv)
 {
 	cout << "INVENTORY ================\n";
@@ -148,25 +150,9 @@ void PrintInventory(Inventory* inv)
 	cout << "Keys:\t\t" << +inv->keys << "\n";
 	cout << "Gems:\t\t" << +inv->gems << "\n";
 	cout << "Torch:\t\t" << +inv->torches << "\n";
-	cout << "Grapple?:\t" << +inv->grapple << "\n";
 	cout << "MgcCrpt:\t" << +inv->magicCarpet << "\n";
 	cout << "SkullKeys:\t" << +inv->skullKeys << "\n";
-	cout << "[Unknown0]:\t" << +inv->unkown_0 << "\n";
 	cout << "Amulets:\t" << +inv->amulets << "\n";
 	cout << "Crowns:\t\t" << +inv->crowns << "\n";
-	for (size_t i = 0; i < sizeof(inv->otherSlots); i++)
-	{
-		cout << "other" << i << ":\t\t" << hex(inv->otherSlots[i]) << "\n";
-	}
-	cout << "PocketWatch:\t" << hex(inv->pocketwatch) << "\n";
-
-	cout << "Ankh:\t\t" << +inv->uniqueAmulets.ankh << "\n";
-
-	cout << "YellowPotion:\t" << +inv->potions.yellow << "\n";
-
 	cout << "MagicAxe:\t" << +inv->weapons.magicAxe << "\n";
-
-	cout << "Ginseng:\t" << +inv->reagents.ginseng << "\n";
-
-	cout << "PartySize:\t" << +inv->partySize << "\n\n";
 }

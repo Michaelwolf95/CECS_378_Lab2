@@ -14,7 +14,8 @@ FE was 254
 3C -> 60 -> HM
 C0 -> 192 -> EX
 
-End of character list...
+024A
+0279
 
 Player
 Shamino
